@@ -7,7 +7,9 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"runtime"
 	"strings"
+
 	"github.com/go-git/go-git/v5"
 )
 
@@ -28,7 +30,6 @@ func execute_command(input string) error {
 	}
 
 	command := exec.Command(args[0],args[1:]...)
-	
 	command.Stderr = os.Stderr
 	command.Stdout = os.Stdout
 	
@@ -79,5 +80,8 @@ func main()  {
 		if err = execute_command(input); err != nil {
 			fmt.Fprintln(os.Stderr,err)
 		}
+
+	 
+		
 	}
 }	
