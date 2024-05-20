@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"os/user"
 	"strings"
+	"github.com/go-git/go-git/v5"
 )
 
 func execute_command(input string) error {
@@ -53,8 +54,16 @@ func print_user_dir(){
 		if err != nil {
 			log.Fatal(err)
 		}
+		working_tree, err := git.PlainOpen(working_absolute_dir)
+		if err != nil {
+			log.Fatal(err)	
+		}
+		working_tree_name, err := working_tree.Head()
+		if err != nil {
+			log.Fatal(err)
+		}
 		fmt.Printf("(%s@%s)-",current_user.Username,host_name)
-		fmt.Printf("[%s]",working_relative_dir)
+		fmt.Printf("[%s][%s]",working_relative_dir,working_tree_name)
 		fmt.Print(" $ ")
 }
 
