@@ -37,12 +37,17 @@ func execute_command(input string) error {
 func main()  {
 	reader := bufio.NewReader(os.Stdin)
 	for{
-		wd, err := os.Getwd()
+		home_dir, err := os.UserHomeDir()
 		if err != nil{
 			log.Fatal(err)
 		}
-		fmt.Print(wd)
-		fmt.Print(" =>")
+		working_absolute_dir, err := os.Getwd()
+		if err != nil{
+			log.Fatal(err)
+		}
+		working_relative_dir := strings.Replace(working_absolute_dir,home_dir,"~",1)
+		fmt.Print(working_relative_dir)
+		fmt.Print(" $ ")
 		input,err := reader.ReadString('\n')
 		if err != nil{
 			fmt.Fprintln(os.Stderr,err)
