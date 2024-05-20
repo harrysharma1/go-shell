@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -36,7 +37,12 @@ func execute_command(input string) error {
 func main()  {
 	reader := bufio.NewReader(os.Stdin)
 	for{
-		fmt.Print("=>")
+		wd, err := os.Getwd()
+		if err != nil{
+			log.Fatal(err)
+		}
+		fmt.Print(wd)
+		fmt.Print(" =>")
 		input,err := reader.ReadString('\n')
 		if err != nil{
 			fmt.Fprintln(os.Stderr,err)
