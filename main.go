@@ -10,12 +10,14 @@ import (
 
 func execute_command(input string) error {
 	input = strings.TrimSuffix(input, "\n")
-	
-	command := exec.Command(input)
+	args := strings.Split(input, " ")
+
+	command := exec.Command(args[0],args[1:]...)
 
 	command.Stderr = os.Stderr
 	command.Stdout = os.Stdout
-
+	
+	
 	return command.Run()
 }
 
