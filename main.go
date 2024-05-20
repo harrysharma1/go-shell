@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -15,7 +14,10 @@ func execute_command(input string) error {
 	switch args[0]{
 		case "cd":
 			if len(args) <2{
-				return errors.New("Path Required")
+				return os.Chdir("/Users/harrysharma/")
+			}
+			if args[1] == "~/"{
+				return os.Chdir("/Users/harrysharma/")
 			}
 			return os.Chdir(args[1])
 		case "exit":
