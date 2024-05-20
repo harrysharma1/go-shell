@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/user"
 	"strings"
 )
 
@@ -34,9 +35,7 @@ func execute_command(input string) error {
 	return command.Run()
 }
 
-func main()  {
-	reader := bufio.NewReader(os.Stdin)
-	for{
+func print_user_dir(){
 		home_dir, err := os.UserHomeDir()
 		if err != nil{
 			log.Fatal(err)
@@ -46,8 +45,23 @@ func main()  {
 			log.Fatal(err)
 		}
 		working_relative_dir := strings.Replace(working_absolute_dir,home_dir,"~",1)
-		fmt.Print(working_relative_dir)
+		current_user,err := user.Current()
+		if err != nil{
+			log.Fatal(err)
+		}
+		host_name, err := os.Hostname()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("(%s@%s)-",current_user.Username,host_name)
+		fmt.Printf("[%s]",working_relative_dir)
 		fmt.Print(" $ ")
+}
+
+func main()  {
+	reader := bufio.NewReader(os.Stdin)
+	for{
+		print_user_dir()
 		input,err := reader.ReadString('\n')
 		if err != nil{
 			fmt.Fprintln(os.Stderr,err)
