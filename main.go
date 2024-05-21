@@ -9,7 +9,6 @@ import (
 	"os/user"
 	"strings"
 
-	"github.com/go-git/go-git/v5"
 )
 
 func execute_command(input string) error {
@@ -17,11 +16,18 @@ func execute_command(input string) error {
 	args := strings.Split(input, " ")
 	switch args[0]{
 		case "cd":
+			homedir, err := os.UserHomeDir()
+			if err != nil{
+				log.Fatal(err)
+			}
 			if len(args) <2{
-				return os.Chdir("/Users/harrysharma/")
+				return os.Chdir(homedir)
 			}
 			if args[1] == "~/"{
-				return os.Chdir("/Users/harrysharma/")
+				return os.Chdir(homedir)
+			}
+			if args[1] == "~"{
+				return os.Chdir(homedir)
 			}
 			return os.Chdir(args[1])
 		case "exit":
@@ -54,16 +60,9 @@ func print_user_dir(){
 		if err != nil {
 			log.Fatal(err)
 		}
-		working_tree, err := git.PlainOpen(working_absolute_dir)
-		if err != nil {
-			log.Fatal(err)	
-		}
-		working_tree_name, err := working_tree.Head()
-		if err != nil {
-			log.Fatal(err)
-		}
+		
 		fmt.Printf("(%s@%s)-",current_user.Username,host_name)
-		fmt.Printf("[%s][%s]",working_relative_dir,working_tree_name)
+		fmt.Printf("[%s]",working_relative_dir)
 		fmt.Print(" $ ")
 }
 
