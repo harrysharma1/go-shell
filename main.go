@@ -40,17 +40,21 @@ func execute_command(input string) error {
 			case "Joker","joker":
 				data := `
 			Name: Unkown
-			Age: Unkown
-			Height: 5ft 11"
+			Age: 34
+			Height: 6ft 8"
+			Weight: 195lbs
 			`
 				return fmt.Errorf(data)
 			case "Bane","bane":
 				data := `
-			Name: Unkown
-			Age: Unkown
-			Height: 6ft 12"
+			Name: Eduardo Dorrance
+			Age: 62
+			Height: 6ft 8"
+			Weight: 350lbs
 			`
 				return fmt.Errorf(data)
+			default:
+				return fmt.Errorf("Villain not found")
 			}
 		case "exit":
 			os.Exit(0)
