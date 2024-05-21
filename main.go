@@ -53,6 +53,14 @@ func execute_command(input string) error {
 			Weight: 350lbs
 			`
 				return fmt.Errorf(data)
+			case "Harley Quinn","harley quinn","harley Quinn","Harley quinn":
+				data:=`
+			Name: Harleen Quinzel
+			Age: Unkown
+			Height: Unkown
+			Weight: Unkown
+			`
+				return fmt.Errorf(data)
 			default:
 				return fmt.Errorf("Villain not found")
 			}
