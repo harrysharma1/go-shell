@@ -9,9 +9,19 @@ import (
 	"os/user"
 	"strings"
 	"errors"
+	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
+
 )
 
 var error_no_villain = errors.New("Forgot to input name")
+
+func search_db(moniker string) string {
+	db,err := sql.Open("sqlite3","villains.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
 func execute_command(input string) error {
 	input = strings.TrimSuffix(input, "\n")
