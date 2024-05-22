@@ -36,7 +36,8 @@ func execute_command(input string) error {
 			if len(args)<2{
 				return error_no_villain;
 			}
-			switch args[1]{
+			name := strings.Join(args[1:]," ")
+			switch name{
 			case "Joker","joker":
 				data := `
 			Name: Unkown
@@ -55,10 +56,10 @@ func execute_command(input string) error {
 				return fmt.Errorf(data)
 			case "Harley Quinn","harley quinn","harley Quinn","Harley quinn":
 				data:=`
-			Name: Harleen Quinzel
-			Age: Unkown
-			Height: Unkown
-			Weight: Unkown
+			Name: Dr. Harleen Quinzel
+			Age: 29
+			Height: 5ft 6"
+			Weight: 140lbs
 			`
 				return fmt.Errorf(data)
 			default:
