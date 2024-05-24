@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"slices"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -66,9 +67,23 @@ func execute_command(input string) error {
 			}
 			return os.Chdir(args[1])
 		case "villain":
+			valid_flags := []string{"-h","--help"}
+			valid_subcommands := []string{"firstname","lastname","age","height","weight"}
 			if len(args)<2{
 				return fmt.Errorf("Incorrect use of villain. Example use villain [flag] [subcommand] [optional name] \nFor more help try villain -h")
 			}
+			contains_flags := slices.Contains(valid_flags,args[1])
+			if contains_flags{
+				if len(args) > 2{
+					contains_subcommands := slices.Contains(valid_subcommands, args[2])
+				}else{
+					help := `
+					`
+				}
+			}else{
+
+			}	
+			
 		case "exit":
 			os.Exit(0)
 	}
