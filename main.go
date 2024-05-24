@@ -6,8 +6,10 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/signal"
 	"os/user"
 	"strings"
+	"syscall"
 
 )
 
@@ -96,6 +98,7 @@ func main()  {
 	print_introduction()
 	for{
 		print_user_dir()
+
 		input,err := reader.ReadString('\n')
 		if err != nil{
 			fmt.Fprintln(os.Stderr,err)
@@ -105,5 +108,11 @@ func main()  {
 			fmt.Fprintln(os.Stderr,err)
 		}
 		
+		c := make(chan os.Signal)
+		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+		go func() {
+			<-c
+			os.Exit(1)
+		}()		
 	}
 }	
