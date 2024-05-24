@@ -2,50 +2,16 @@ package main
 
 import (
 	"bufio"
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"os/user"
-	"slices"
 	"strings"
 
-	_ "github.com/mattn/go-sqlite3"
 )
 
 
-type villain struct{
-	id			int
-	first_name		string
-	last_name		string
-	villain_moniker		string
-	age			int 
-	height			string
-	weight			string 
-	notes			string
-}
-
-func search_db(moniker string) villain {
-	db,err := sql.Open("sqlite3","./villain.db")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	rows, err := db.Query("SELECT * FROM villains WHERE villain_moniker LIKE '%"+moniker) 
-	
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer rows.Close()
-
-	villain := make([]villain,0)
-
-	return villain[0]
-
-
-}
 
 func execute_command(input string) error {
 	input = strings.TrimSuffix(input, "\n")
@@ -66,24 +32,6 @@ func execute_command(input string) error {
 				return os.Chdir(homedir)
 			}
 			return os.Chdir(args[1])
-		case "villain":
-			valid_flags := []string{"-h","--help"}
-			valid_subcommands := []string{"firstname","lastname","age","height","weight"}
-			if len(args)<2{
-				return fmt.Errorf("Incorrect use of villain. Example use villain [flag] [subcommand] [optional name] \nFor more help try villain -h")
-			}
-			contains_flags := slices.Contains(valid_flags,args[1])
-			if contains_flags{
-				if len(args) > 2{
-					contains_subcommands := slices.Contains(valid_subcommands, args[2])
-				}else{
-					help := `
-					`
-				}
-			}else{
-
-			}	
-			
 		case "exit":
 			os.Exit(0)
 	}
