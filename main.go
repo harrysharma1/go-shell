@@ -2,25 +2,48 @@ package main
 
 import (
 	"bufio"
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
 	"os/exec"
 	"os/user"
 	"strings"
-	"errors"
-	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 
+	_ "github.com/mattn/go-sqlite3"
 )
 
-var error_no_villain = errors.New("Forgot to input name")
 
-func search_db(moniker string) string {
-	db,err := sql.Open("sqlite3","villains.db")
+type villain struct{
+	id			int
+	first_name		string
+	last_name		string
+	villain_moniker		string
+	age			int 
+	height			string
+	weight			string 
+	notes			string
+}
+
+func search_db(moniker string) villain {
+	db,err := sql.Open("sqlite3","./villain.db")
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	rows, err := db.Query("SELECT * FROM villains WHERE villain_moniker LIKE '%"+moniker) 
+	
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer rows.Close()
+
+	villain := make([]villain,0)
+
+	return villain[0]
+
+
 }
 
 func execute_command(input string) error {
@@ -44,36 +67,7 @@ func execute_command(input string) error {
 			return os.Chdir(args[1])
 		case "villain":
 			if len(args)<2{
-				return error_no_villain;
-			}
-			name := strings.Join(args[1:]," ")
-			switch name{
-			case "Joker","joker":
-				data := `
-			Name: Unkown
-			Age: 34
-			Height: 6ft 8"
-			Weight: 195lbs
-			`
-				return fmt.Errorf(data)
-			case "Bane","bane":
-				data := `
-			Name: Eduardo Dorrance
-			Age: 62
-			Height: 6ft 8"
-			Weight: 350lbs
-			`
-				return fmt.Errorf(data)
-			case "Harley Quinn","harley quinn","harley Quinn","Harley quinn":
-				data:=`
-			Name: Dr. Harleen Quinzel
-			Age: 29
-			Height: 5ft 6"
-			Weight: 140lbs
-			`
-				return fmt.Errorf(data)
-			default:
-				return fmt.Errorf("Villain not found")
+				return fmt.Errorf("Incorrect use of villain. Example use villain [flag] [subcommand] [optional name] \nFor more help try villain -h")
 			}
 		case "exit":
 			os.Exit(0)
