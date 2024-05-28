@@ -96,6 +96,18 @@ func print_introduction(){
 func main()  {
 	reader := bufio.NewReader(os.Stdin)
 	print_introduction()
+	channel_signal := make(chan os.Signal,1)
+	signal.Notify(channel_signal,syscall.SIGINT)
+
+	go func(){
+		signal := <- channel_signal
+		switch signal{
+			case syscall.SIGINT:
+				os.Exit(0)
+			
+		}
+	}()
+	
 	for{
 		print_user_dir()
 
@@ -108,11 +120,8 @@ func main()  {
 			fmt.Fprintln(os.Stderr,err)
 		}
 		
-		c := make(chan os.Signal)
-		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-		go func() {
-			<-c
-			os.Exit(1)
-		}()		
+		
+		
+
 	}
 }	
